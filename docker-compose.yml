@@ -1,4 +1,12 @@
 services:
+  stock-publisher:
+    build: ./stock-publisher
+    environment:
+      RABBITMQ_URL: "amqp://stockmarket:supersecret123@rabbitmq:5672/"
+    depends_on:
+      - rabbitmq
+    restart: always
+
   rabbitmq:
     image: rabbitmq:latest
     ports:
