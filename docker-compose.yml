@@ -3,15 +3,25 @@ services:
     build: ./stock-publisher
     environment:
       RABBITMQ_URL: "amqp://stockmarket:supersecret123@rabbitmq:5672/"
+      TICKER_INTERVAL: "1"
     depends_on:
       - rabbitmq
     restart: always
+    networks:
+      - stock_publisher_mq
 
   rabbitmq:
-    image: rabbitmq:latest
+    image: rabbitmq:3-management-alpine
     ports:
       - "5672:5672"   # AMQP
       - "15672:15672" # RabbitMQ Management Dashboard
     environment:
       RABBITMQ_DEFAULT_USER: "stockmarket"
       RABBITMQ_DEFAULT_PASS: "supersecret123"
+    networks:
+      - stock_publisher_mq
+
+
+networks:
+  stock_publisher_mq:
+    driver: bridge
