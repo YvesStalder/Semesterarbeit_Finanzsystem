@@ -10,7 +10,6 @@ import (
 	"strconv"
 	"time"
 
-	_ "go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -38,8 +37,10 @@ func getEnvWithDefault(key, fallback string) string {
 }
 
 func connectToMongo() *mongo.Collection {
-	mongoURI := getEnvWithDefault("MONGODB_URI", "mongodb://localhost:27017")
+	mongoURI := getEnvWithDefault("MONGODB_URI", "mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=rs0")
+
 	clientOptions := options.Client().ApplyURI(mongoURI)
+
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	failOnError(err, "Failed to connect to MongoDB")
 

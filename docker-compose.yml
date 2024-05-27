@@ -7,8 +7,48 @@ services:
     depends_on:
       - rabbitmq
     restart: always
-    networks:
-      - stock_publisher_mq
+
+  consumer_tsla:
+    build: ./consumer
+    environment:
+      RABBITMQ_URL: "amqp://stockmarket:supersecret123@rabbitmq:5672/"
+      STOCK: "TSLA"
+      BATCH_SIZE: "1000"
+      MONGODB_URI: "mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=rs0"
+    depends_on:
+      - rabbitmq
+      - mongo1
+      - mongo2
+      - mongo3
+    restart: always
+
+  consumer_aapl:
+    build: ./consumer
+    environment:
+      RABBITMQ_URL: "amqp://stockmarket:supersecret123@rabbitmq:5672/"
+      STOCK: "AAPL"
+      BATCH_SIZE: "1000"
+      MONGODB_URI: "mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=rs0"
+    depends_on:
+      - rabbitmq
+      - mongo1
+      - mongo2
+      - mongo3
+    restart: always
+
+  consumer_msft:
+    build: ./consumer
+    environment:
+      RABBITMQ_URL: "amqp://stockmarket:supersecret123@rabbitmq:5672/"
+      STOCK: "MSFT"
+      BATCH_SIZE: "1000"
+      MONGODB_URI: "mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=rs0"
+    depends_on:
+      - rabbitmq
+      - mongo1
+      - mongo2
+      - mongo3
+    restart: always
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
@@ -18,8 +58,6 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: "stockmarket"
       RABBITMQ_DEFAULT_PASS: "supersecret123"
-    networks:
-      - stock_publisher_mq
 
   # --- ReplicatSet MongoDB ---
   mongo1:
@@ -70,7 +108,3 @@ volumes:
   mongo3_data:
   mongo3_config:
 
-
-networks:
-  stock_publisher_mq:
-    driver: bridge
