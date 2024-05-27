@@ -14,7 +14,7 @@ services:
       RABBITMQ_URL: "amqp://stockmarket:supersecret123@rabbitmq:5672/"
       STOCK: "TSLA"
       BATCH_SIZE: "1000"
-      MONGODB_URI: "mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=rs0"
+      MONGODB_URI: "mongodb://mongo1:27017,mongo2:27018,mongo3:27019/?replicaSet=rs0"
     depends_on:
       - rabbitmq
       - mongo1
@@ -28,7 +28,7 @@ services:
       RABBITMQ_URL: "amqp://stockmarket:supersecret123@rabbitmq:5672/"
       STOCK: "AAPL"
       BATCH_SIZE: "1000"
-      MONGODB_URI: "mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=rs0"
+      MONGODB_URI: "mongodb://mongo1:27017,mongo2:27018,mongo3:27019/?replicaSet=rs0"
     depends_on:
       - rabbitmq
       - mongo1
@@ -42,7 +42,7 @@ services:
       RABBITMQ_URL: "amqp://stockmarket:supersecret123@rabbitmq:5672/"
       STOCK: "MSFT"
       BATCH_SIZE: "1000"
-      MONGODB_URI: "mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=rs0"
+      MONGODB_URI: "mongodb://mongo1:27017,mongo2:27018,mongo3:27019/?replicaSet=rs0"
     depends_on:
       - rabbitmq
       - mongo1
@@ -59,7 +59,7 @@ services:
       RABBITMQ_DEFAULT_USER: "stockmarket"
       RABBITMQ_DEFAULT_PASS: "supersecret123"
 
-  # --- ReplicatSet MongoDB ---
+  # --- ReplicateSet MongoDB ---
   mongo1:
     image: mongo:7.0
     ports:

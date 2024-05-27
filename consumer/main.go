@@ -12,6 +12,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
 type StockMessage struct {
@@ -52,7 +53,7 @@ func connectToMongo() *mongo.Collection {
 	failOnError(err, "Failed to connect to MongoDB")
 
 	// Test connection with ping
-	err = client.Ping(context.TODO(), nil)
+	err = client.Ping(context.TODO(), readpref.Primary())
 	failOnError(err, "Failed to ping MongoDB")
 
 	// Create new Database with collection
