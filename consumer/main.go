@@ -20,14 +20,18 @@ type StockMessage struct {
 	Price     float64 `json:"price"`
 }
 
-// failOnError is a helper function to log error messages
+/*
+ *	failOnError is a helper function to log error messages
+ */
 func failOnError(err error, msg string) {
 	if err != nil {
 		log.Fatalf("%s: %s", msg, err)
 	}
 }
 
-// getEnvWithDefault returns the value of an environment variable or a default value if the environment variable is not set
+/*
+ *	getEnvWithDefault returns the value of an environment variable or a default value if the environment variable is not set
+ */
 func getEnvWithDefault(key, fallback string) string {
 	value := os.Getenv(key)
 	if value == "" {
@@ -36,6 +40,9 @@ func getEnvWithDefault(key, fallback string) string {
 	return value
 }
 
+/*
+ *	connectToMongo connects to MongoDB and checks connection with ping
+ */
 func connectToMongo() *mongo.Collection {
 	mongoURI := getEnvWithDefault("MONGODB_URI", "mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=rs0")
 
@@ -44,14 +51,18 @@ func connectToMongo() *mongo.Collection {
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	failOnError(err, "Failed to connect to MongoDB")
 
-	// Test connection with Ping
+	// Test connection with ping
 	err = client.Ping(context.TODO(), nil)
 	failOnError(err, "Failed to ping MongoDB")
 
+	// Create new Database with collection
 	collection := client.Database("stockmarket").Collection("stocks")
 	return collection
 }
 
+/*
+ *	calculateAverage calculates the average from 1000 prices
+ */
 func calculateAverage(prices []float64) float64 {
 	total := 0.0
 	for _, price := range prices {
@@ -60,6 +71,9 @@ func calculateAverage(prices []float64) float64 {
 	return total / float64(len(prices))
 }
 
+/*
+ *	saveAverageToMongo saves the average to the MongoDB
+ */
 func saveAverageToMongo(collection *mongo.Collection, average float64) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -73,6 +87,9 @@ func saveAverageToMongo(collection *mongo.Collection, average float64) {
 	failOnError(err, "Failed to insert document into MongoDB")
 }
 
+/*
+ *	stockReader reads msgs from Queue
+ */
 func stockReader(conn *amqp.Connection, collection *mongo.Collection) {
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to open a channel")
