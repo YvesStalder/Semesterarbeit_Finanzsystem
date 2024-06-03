@@ -1,4 +1,5 @@
 services:
+  # STOCK-PUBLISHER
   stock-publisher:
     build: ./stock-publisher
     environment:
@@ -8,6 +9,7 @@ services:
       - rabbitmq
     restart: always
 
+  # COSUMER TSLA STOCKS
   consumer_tsla:
     build: ./consumer
     environment:
@@ -22,6 +24,7 @@ services:
       - mongo3
     restart: always
 
+  # COSUMER AAPL STOCKS
   consumer_aapl:
     build: ./consumer
     environment:
@@ -36,6 +39,7 @@ services:
       - mongo3
     restart: always
 
+  # COSUMER MSFT STOCKS
   consumer_msft:
     build: ./consumer
     environment:
@@ -50,6 +54,24 @@ services:
       - mongo3
     restart: always
 
+  # FRONTEND STOCK-LIVEVIEW
+  stock_liveview:
+    build: ./stock-liveview
+    ports:
+      - "3000:3000" # RabbitMQ Management Dashboard
+    environment:
+      PORT: "3000"
+      MONGODB_URL: "mongodb://mongo1:27017,mongo2:27018,mongo3:27019/?replicaSet=rs0"
+      MONGODB_DB: "stockmarket"
+      MONGODB_COLLECTION: "stocks"
+      NODE_ENV: "develop"
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    restart: always
+
+  # RABBITM AAPL STOCKS
   rabbitmq:
     image: rabbitmq:3-management-alpine
     ports:
@@ -63,6 +85,7 @@ services:
   mongo1:
     image: mongo:7.0
     ports:
+      #Host:Container
       - "27017:27017"
     command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017" ]
     extra_hosts:
@@ -81,6 +104,7 @@ services:
   mongo2:
     image: mongo:7.0
     ports:
+      #Host:Container
       - "27018:27018"
     command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27018" ]
     extra_hosts:
@@ -92,6 +116,7 @@ services:
   mongo3:
     image: mongo:7.0
     ports:
+      #Host:Container
       - "27019:27019"
     command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27019" ]
     extra_hosts:
