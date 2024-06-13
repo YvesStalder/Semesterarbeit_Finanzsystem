@@ -1,7 +1,7 @@
 services:
   # STOCK-PUBLISHER
   stock-publisher:
-    image: yvesstalder2/stock-publisher
+    image: yvesstalder2/stock-publisher:latest
     environment:
       RABBITMQ_URL: "amqp://stockmarket:supersecret123@rabbitmq:5672/"
       TICKER_INTERVAL: "1"
@@ -11,7 +11,7 @@ services:
 
   # COSUMER TSLA STOCKS
   consumer_tsla:
-    image: yvesstalder2/consumer
+    image: yvesstalder2/consumer:latest
     environment:
       RABBITMQ_URL: "amqp://stockmarket:supersecret123@rabbitmq:5672/"
       STOCK: "TSLA"
@@ -26,7 +26,7 @@ services:
 
   # COSUMER AAPL STOCKS
   consumer_aapl:
-    image: yvesstalder2/consumer
+    image: yvesstalder2/consumer:latest
     environment:
       RABBITMQ_URL: "amqp://stockmarket:supersecret123@rabbitmq:5672/"
       STOCK: "AAPL"
@@ -41,7 +41,7 @@ services:
 
   # COSUMER MSFT STOCKS
   consumer_msft:
-    image: yvesstalder2/consumer
+    image: yvesstalder2/consumer:latest
     environment:
       RABBITMQ_URL: "amqp://stockmarket:supersecret123@rabbitmq:5672/"
       STOCK: "MSFT"
@@ -56,7 +56,7 @@ services:
 
   # FRONTEND STOCK-LIVEVIEW-1
   stock_liveview_1:
-    image: yvesstalder2/stock-liveview
+    image: yvesstalder2/stock-liveview:latest
     environment:
       PORT: "3000"
       MONGODB_URL: "mongodb://mongo1:27017,mongo2:27018,mongo3:27019/?replicaSet=rs0"
@@ -71,7 +71,7 @@ services:
 
   # FRONTEND STOCK-LIVEVIEW-2
   stock_liveview_2:
-    image: yvesstalder2/stock-liveview
+    image: yvesstalder2/stock-liveview:latest
     environment:
       PORT: "3000"
       MONGODB_URL: "mongodb://mongo1:27017,mongo2:27018,mongo3:27019/?replicaSet=rs0"
